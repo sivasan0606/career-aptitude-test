@@ -2,59 +2,76 @@
 <html>
 <head>
   <title>Career Aptitude Test</title>
-  <style>
-     body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+  <style>  
+  html, body {
+    height: 100%;
     margin: 0;
-    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #eef2f3, #ffffff);
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+  }
+
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
   }
 
   .container {
-    max-width: 800px;
-    background-color: #ffffff;
+    background-color: #fff;
     padding: 30px;
-    margin: 40px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
   }
 
   h2 {
-    color: #2c3e50;
     text-align: center;
+    color: #34495e;
     margin-bottom: 30px;
+    font-size: 28px;
   }
 
   .question {
     margin-bottom: 20px;
     padding: 15px;
-    border-left: 4px solid #3498db;
-    background-color: #f9f9f9;
-    border-radius: 4px;
+    background-color: #f7f9fa;
+    border-left: 5px solid #3498db;
+    border-radius: 6px;
   }
 
   label {
-    font-weight: bold;
+    font-weight: 600;
     display: block;
     margin-bottom: 10px;
+    color: #2c3e50;
   }
 
   input[type="radio"] {
-    margin-right: 10px;
+    margin-right: 8px;
+    margin-left: 10px;
+  }
+
+  .button-wrapper {
+    text-align: center;
+    margin-top: 20px;
   }
 
   button {
-    display: block;
-    margin: 30px auto;
-    padding: 12px 24px;
+    padding: 12px 30px;
     font-size: 16px;
     background-color: #3498db;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
 
   button:hover {
@@ -62,13 +79,13 @@
   }
 
   .result {
-    font-weight: bold;
-    color: #2c3e50;
     margin-top: 30px;
-    padding: 20px;
+    padding: 25px;
     background-color: #eafaf1;
-    border-left: 4px solid #2ecc71;
-    border-radius: 4px;
+    border-left: 5px solid #2ecc71;
+    border-radius: 6px;
+    color: #2c3e50;
+    font-weight: 500;
     white-space: pre-line;
   }
   </style>
@@ -82,210 +99,85 @@
   <script>
     const traits = ["analytical", "creative", "social", "enterprising", "realistic", "conventional"];
     const questionsPool = [
-      { q: "You enjoy comparing prices and finding the best deals.", t: "analytical" },
-{ q: "You like creating your own comic strips or characters.", t: "creative" },
-{ q: "You enjoy organizing group activities or games.", t: "social" },
-{ q: "You like convincing others to try your ideas.", t: "enterprising" },
-{ q: "You enjoy working with wood, clay, or metal.", t: "realistic" },
-{ q: "You like keeping your calendar or planner updated.", t: "conventional" },
-{ q: "You enjoy solving Sudoku or number puzzles.", t: "analytical" },
-{ q: "You like designing clothes or accessories.", t: "creative" },
-{ q: "You enjoy helping classmates understand homework.", t: "social" },
-{ q: "You like organizing fundraisers or campaigns.", t: "enterprising" },
-{ q: "You enjoy fixing bikes or toys.", t: "realistic" },
-{ q: "You like checking your work for neatness and accuracy.", t: "conventional" },
-{ q: "You enjoy analyzing how things are made.", t: "analytical" },
-{ q: "You like experimenting with colors and patterns.", t: "creative" },
-{ q: "You enjoy being a mentor or role model.", t: "social" },
-{ q: "You like running for leadership roles.", t: "enterprising" },
-{ q: "You enjoy outdoor survival or camping skills.", t: "realistic" },
-{ q: "You like following routines and schedules.", t: "conventional" },
-{ q: "You enjoy solving mysteries or detective games.", t: "analytical" },
-{ q: "You like making greeting cards or gifts.", t: "creative" },
-{ q: "You enjoy comforting others when they’re sad.", t: "social" },
-{ q: "You like managing group projects.", t: "enterprising" },
-{ q: "You enjoy using tools like pliers or wrenches.", t: "realistic" },
-{ q: "You like organizing files or folders on your computer.", t: "conventional" },
-{ q: "You enjoy learning about space or the universe.", t: "analytical" },
-{ q: "You like making up songs or jingles.", t: "creative" },
-{ q: "You enjoy helping out at school events.", t: "social" },
-{ q: "You like planning how to sell a product.", t: "enterprising" },
-{ q: "You enjoy assembling electronics or gadgets.", t: "realistic" },
-{ q: "You like keeping your notes and books in order.", t: "conventional" },
-{ q: "You enjoy reading about inventions and discoveries.", t: "analytical" },
-{ q: "You like creating digital art or memes.", t: "creative" },
-{ q: "You enjoy being part of a support group.", t: "social" },
-{ q: "You like pitching ideas to a panel or audience.", t: "enterprising" },
-{ q: "You enjoy working with your hands in nature.", t: "realistic" },
-{ q: "You like checking off completed tasks.", t: "conventional" },
-{ q: "You enjoy solving equations or formulas.", t: "analytical" },
-{ q: "You like making stop-motion videos or animations.", t: "creative" },
-{ q: "You enjoy helping others stay motivated.", t: "social" },
-{ q: "You like organizing a team to reach a goal.", t: "enterprising" },
-{ q: "You enjoy repairing household items.", t: "realistic" },
-{ q: "You like sorting things by color, size, or type.", t: "conventional" },
-{ q: "You enjoy learning about how the brain works.", t: "analytical" },
-{ q: "You like designing your own board games.", t: "creative" },
-{ q: "You enjoy volunteering at animal shelters.", t: "social" },
-{ q: "You like creating business plans or pitches.", t: "enterprising" },
-{ q: "You enjoy using measuring tools like rulers or calipers.", t: "realistic" },
-{ q: "You like keeping your backpack or locker organized.", t: "conventional" },
-{ q: "You enjoy analyzing sports statistics.", t: "analytical" },
-{ q: "You like decorating spaces for events or holidays.", t: "creative" },
-  { q: "You enjoy solving math puzzles.", t: "analytical" },
-  { q: "You love drawing or designing things.", t: "creative" },
-  { q: "You enjoy helping friends with their problems.", t: "social" },
-  { q: "You like leading group activities.", t: "enterprising" },
-  { q: "You prefer hands-on tasks like building or fixing.", t: "realistic" },
-  { q: "You enjoy organizing and planning.", t: "conventional" },
-  { q: "You like experimenting with science kits.", t: "analytical" },
-  { q: "You enjoy writing stories or poems.", t: "creative" },
-  { q: "You like volunteering or helping in your community.", t: "social" },
-  { q: "You enjoy selling things or convincing others.", t: "enterprising" },
-  { q: "You enjoy working with tools or machines.", t: "realistic" },
-  { q: "You like keeping your room or desk tidy.", t: "conventional" },
-  { q: "You enjoy solving logic riddles.", t: "analytical" },
-  { q: "You like crafting or making DIY art.", t: "creative" },
-  { q: "You enjoy listening to others and giving advice.", t: "social" },
-  { q: "You like organizing events or school activities.", t: "enterprising" },
-  { q: "You enjoy outdoor activities like gardening or hiking.", t: "realistic" },
-  { q: "You like following step-by-step instructions.", t: "conventional" },
-  { q: "You enjoy learning how things work.", t: "analytical" },
-  { q: "You like acting or performing on stage.", t: "creative" },
-  { q: "You enjoy working in teams.", t: "social" },
-  { q: "You like taking charge in group projects.", t: "enterprising" },
-  { q: "You enjoy fixing broken things.", t: "realistic" },
-  { q: "You like sorting and filing papers.", t: "conventional" },
-  { q: "You enjoy solving science mysteries.", t: "analytical" },
-  { q: "You like designing posters or logos.", t: "creative" },
-  { q: "You enjoy comforting friends when they’re upset.", t: "social" },
-  { q: "You like thinking of new business ideas.", t: "enterprising" },
-  { q: "You enjoy building models or kits.", t: "realistic" },
-  { q: "You like making to-do lists.", t: "conventional" },
-  { q: "You enjoy analyzing graphs or charts.", t: "analytical" },
-  { q: "You like decorating your room creatively.", t: "creative" },
-  { q: "You enjoy planning group outings.", t: "social" },
-  { q: "You like being the spokesperson for your team.", t: "enterprising" },
-  { q: "You enjoy using tools like screwdrivers or hammers.", t: "realistic" },
-  { q: "You like checking things for mistakes.", t: "conventional" },
-  { q: "You enjoy solving math word problems.", t: "analytical" },
-  { q: "You like making music or beats.", t: "creative" },
-  { q: "You enjoy helping younger kids learn.", t: "social" },
-  { q: "You like coming up with slogans or ads.", t: "enterprising" },
-  { q: "You enjoy assembling furniture or kits.", t: "realistic" },
-  { q: "You like organizing your school supplies.", t: "conventional" },
-  { q: "You enjoy reading science magazines.", t: "analytical" },
-  { q: "You like painting or sketching in your free time.", t: "creative" },
-  { q: "You enjoy being part of a club or group.", t: "social" },
-  { q: "You like pitching ideas to others.", t: "enterprising" },
-  { q: "You enjoy working with your hands.", t: "realistic" },
-  { q: "You like keeping track of your expenses.", t: "conventional" },
-  { q: "You enjoy solving brain teasers.", t: "analytical" },
-  { q: "You like creating videos or animations.", t: "creative" },
-{ q: "You enjoy solving logic-based board games.", t: "analytical" },
-{ q: "You like creating your own comic books.", t: "creative" },
-{ q: "You enjoy helping organize charity events.", t: "social" },
-{ q: "You like leading debates or discussions.", t: "enterprising" },
-{ q: "You enjoy assembling mechanical toys.", t: "realistic" },
-{ q: "You like organizing your digital files.", t: "conventional" },
-{ q: "You enjoy learning about scientific discoveries.", t: "analytical" },
-{ q: "You like making collages or mood boards.", t: "creative" },
-{ q: "You enjoy mentoring younger students.", t: "social" },
-{ q: "You like creating advertisements or flyers.", t: "enterprising" },
-{ q: "You enjoy working with soil or plants.", t: "realistic" },
-{ q: "You like keeping track of your homework deadlines.", t: "conventional" },
-{ q: "You enjoy solving math challenges online.", t: "analytical" },
-{ q: "You like designing your own fashion styles.", t: "creative" },
-{ q: "You enjoy helping others feel confident.", t: "social" },
-{ q: "You like managing a team to complete a task.", t: "enterprising" },
-{ q: "You enjoy repairing broken gadgets.", t: "realistic" },
-{ q: "You like organizing your bookshelf alphabetically.", t: "conventional" },
-{ q: "You enjoy reading about physics or chemistry.", t: "analytical" },
-{ q: "You like creating storyboards for videos.", t: "creative" },
-{ q: "You enjoy supporting friends during tough times.", t: "social" },
-{ q: "You like planning school campaigns.", t: "enterprising" },
-{ q: "You enjoy building things from scratch.", t: "realistic" },
-{ q: "You like keeping your workspace neat and labeled.", t: "conventional" },
-{ q: "You enjoy analyzing patterns and trends.", t: "analytical" },
-{ q: "You like experimenting with photography angles.", t: "creative" },
-{ q: "You enjoy organizing group study sessions.", t: "social" },
-{ q: "You like presenting ideas to a crowd.", t: "enterprising" },
-{ q: "You enjoy fixing household tools.", t: "realistic" },
-{ q: "You like creating checklists for your tasks.", t: "conventional" },
-{ q: "You enjoy reading science fiction and thinking critically.", t: "analytical" },
-{ q: "You like painting murals or large canvases.", t: "creative" },
-{ q: "You enjoy helping others set goals.", t: "social" },
-{ q: "You like organizing competitions or contests.", t: "enterprising" },
-{ q: "You enjoy working with natural materials.", t: "realistic" },
-{ q: "You like keeping your digital calendar updated.", t: "conventional" },
-{ q: "You enjoy solving complex puzzles.", t: "analytical" },
-{ q: "You like creating your own music playlists.", t: "creative" },
-{ q: "You enjoy helping others improve their skills.", t: "social" },
-{ q: "You like managing group presentations.", t: "enterprising" },
-{ q: "You enjoy using tools to build models.", t: "realistic" },
-{ q: "You like organizing your school bag efficiently.", t: "conventional" },
-{ q: "You enjoy learning about how machines work.", t: "analytical" },
-{ q: "You like designing logos or brand names.", t: "creative" },
-{ q: "You enjoy being a peer tutor.", t: "social" },
-{ q: "You like leading classroom discussions.", t: "enterprising" },
-{ q: "You enjoy fixing things around the house.", t: "realistic" },
-{ q: "You like keeping your documents in folders.", t: "conventional" },
-{ q: "You enjoy analyzing cause and effect relationships.", t: "analytical" },
-{ q: "You like creating visual presentations.", t: "creative" },
-
-{ q: "You enjoy reading about scientific breakthroughs.", t: "analytical" },
-{ q: "You like creating your own animations or cartoons.", t: "creative" },
-{ q: "You enjoy helping organize classroom responsibilities.", t: "social" },
-{ q: "You like leading a team to solve a challenge.", t: "enterprising" },
-{ q: "You enjoy working with natural materials like clay or wood.", t: "realistic" },
-{ q: "You like keeping your digital workspace clean and sorted.", t: "conventional" },
-{ q: "You enjoy solving advanced math problems.", t: "analytical" },
-{ q: "You like experimenting with new art styles.", t: "creative" },
-{ q: "You enjoy supporting others during group activities.", t: "social" },
-{ q: "You like organizing a school event or fair.", t: "enterprising" },
-{ q: "You enjoy building things with your hands.", t: "realistic" },
-{ q: "You like creating structured plans for your day.", t: "conventional" },
-{ q: "You enjoy analyzing how systems work.", t: "analytical" },
-{ q: "You like designing characters for games or stories.", t: "creative" },
-{ q: "You enjoy helping others feel included.", t: "social" },
-{ q: "You like managing a group to reach a goal.", t: "enterprising" },
-{ q: "You enjoy repairing broken items at home.", t: "realistic" },
-{ q: "You like organizing your school notes by topic.", t: "conventional" },
-{ q: "You enjoy reading about space exploration.", t: "analytical" },
-{ q: "You like creating your own digital content.", t: "creative" },
-{ q: "You enjoy helping others stay organized.", t: "social" },
-{ q: "You like leading a classroom project.", t: "enterprising" },
-{ q: "You enjoy using tools to fix or build.", t: "realistic" },
-{ q: "You like keeping your folders labeled and sorted.", t: "conventional" },
-{ q: "You enjoy solving logic puzzles and brain teasers.", t: "analytical" },
-{ q: "You like painting or sculpting in your free time.", t: "creative" },
-{ q: "You enjoy being a team player in group tasks.", t: "social" },
-{ q: "You like organizing a presentation or pitch.", t: "enterprising" },
-{ q: "You enjoy assembling kits or models.", t: "realistic" },
-{ q: "You like tracking your progress on assignments.", t: "conventional" },
-{ q: "You enjoy learning about biology and ecosystems.", t: "analytical" },
-{ q: "You like creating visual stories or comics.", t: "creative" },
-{ q: "You enjoy helping others understand instructions.", t: "social" },
-{ q: "You like planning a group outing or trip.", t: "enterprising" },
-{ q: "You enjoy working with mechanical parts.", t: "realistic" },
-{ q: "You like organizing your tasks by priority.", t: "conventional" },
-{ q: "You enjoy reading about how things are invented.", t: "analytical" },
-{ q: "You like designing posters or flyers.", t: "creative" },
-{ q: "You enjoy helping others solve personal problems.", t: "social" },
-{ q: "You like leading a brainstorming session.", t: "enterprising" },
-{ q: "You enjoy fixing and maintaining equipment.", t: "realistic" },
-{ q: "You like keeping your workspace clutter-free.", t: "conventional" },
-{ q: "You enjoy exploring scientific websites or apps.", t: "analytical" },
-{ q: "You like experimenting with new creative tools.", t: "creative" },
-{ q: "You enjoy supporting classmates during group work.", t: "social" },
-{ q: "You like organizing a team challenge or contest.", t: "enterprising" },
-{ q: "You enjoy working with physical materials.", t: "realistic" },
-{ q: "You like creating systems to stay organized.", t: "conventional" },
-{ q: "You enjoy solving real-world math problems.", t: "analytical" },
-{ q: "You like making digital illustrations or designs.", t: "creative" }
-
-
-    ];
+      { q: "You enjoy finding the best deals when shopping.", t: "analytical" },
+			{ q: "You like creating comic strips.", t: "creative" },
+			{ q: "You enjoy organizing group activities.", t: "social" },
+			{ q: "You like convincing others to try your ideas.", t: "enterprising" },
+			{ q: "You enjoy working with wood.", t: "realistic" },
+			{ q: "You like updating your calendar regularly.", t: "conventional" },
+			{ q: "You enjoy solving Sudoku puzzles.", t: "analytical" },
+			{ q: "You like designing clothes.", t: "creative" },
+			{ q: "You enjoy helping classmates understand homework.", t: "social" },
+			{ q: "You like organizing fundraisers.", t: "enterprising" },
+			{ q: "You enjoy fixing bikes.", t: "realistic" },
+			{ q: "You like checking your work for neatness.", t: "conventional" },
+			{ q: "You enjoy analyzing how machines are built.", t: "analytical" },
+			{ q: "You like experimenting with color combinations.", t: "creative" },
+			{ q: "You enjoy mentoring younger students.", t: "social" },
+			{ q: "You like running for leadership positions.", t: "enterprising" },
+			{ q: "You enjoy practicing survival skills outdoors.", t: "realistic" },
+			{ q: "You like following daily routines.", t: "conventional" },
+			{ q: "You enjoy solving detective-style puzzles.", t: "analytical" },
+			{ q: "You like making handmade greeting cards.", t: "creative" },
+			{ q: "You enjoy comforting others when they’re sad.", t: "social" },
+			{ q: "You like managing group projects.", t: "enterprising" },
+			{ q: "You enjoy using pliers for repairs.", t: "realistic" },
+			{ q: "You like organizing digital files.", t: "conventional" },
+			{ q: "You enjoy reading about space.", t: "analytical" },
+			{ q: "You like composing short songs.", t: "creative" },
+			{ q: "You enjoy helping at school events.", t: "social" },
+			{ q: "You like planning product launches.", t: "enterprising" },
+			{ q: "You enjoy assembling electronic kits.", t: "realistic" },
+			{ q: "You like keeping your notes organized.", t: "conventional" },
+			{ q: "You enjoy reading about inventions.", t: "analytical" },
+			{ q: "You like creating digital artwork.", t: "creative" },
+			{ q: "You enjoy participating in support groups.", t: "social" },
+			{ q: "You like presenting ideas to an audience.", t: "enterprising" },
+			{ q: "You enjoy working with your hands outdoors.", t: "realistic" },
+			{ q: "You like checking off completed tasks.", t: "conventional" },
+			{ q: "You enjoy solving math equations.", t: "analytical" },
+			{ q: "You like making stop-motion videos.", t: "creative" },
+			{ q: "You enjoy motivating others.", t: "social" },
+			{ q: "You like organizing teams for tasks.", t: "enterprising" },
+			{ q: "You enjoy repairing household items.", t: "realistic" },
+			{ q: "You like sorting items by size.", t: "conventional" },
+			{ q: "You enjoy learning how the brain works.", t: "analytical" },
+			{ q: "You like designing board games.", t: "creative" },
+			{ q: "You enjoy volunteering at shelters.", t: "social" },
+			{ q: "You like creating business plans.", t: "enterprising" },
+			{ q: "You enjoy using measuring tools.", t: "realistic" },
+			{ q: "You like keeping your locker organized.", t: "conventional" },
+			{ q: "You enjoy analyzing sports data.", t: "analytical" },
+			{ q: "You like decorating for events.", t: "creative" },
+			{ q: "You enjoy solving math puzzles.", t: "analytical" },
+			{ q: "You enjoy drawing detailed designs.", t: "creative" },
+			{ q: "You enjoy helping friends solve problems.", t: "social" },
+			{ q: "You like leading group activities.", t: "enterprising" },
+			{ q: "You enjoy building things with your hands.", t: "realistic" },
+			{ q: "You like organizing your schedule.", t: "conventional" },
+			{ q: "You enjoy experimenting with science kits.", t: "analytical" },
+			{ q: "You enjoy writing short stories.", t: "creative" },
+			{ q: "You like helping in your community.", t: "social" },
+			{ q: "You enjoy selling products to others.", t: "enterprising" },
+			{ q: "You enjoy working with machines.", t: "realistic" },
+			{ q: "You like keeping your desk tidy.", t: "conventional" },
+			{ q: "You enjoy solving logic puzzles.", t: "analytical" },
+			{ q: "You like making DIY crafts.", t: "creative" },
+			{ q: "You enjoy listening and giving advice.", t: "social" },
+			{ q: "You like organizing school events.", t: "enterprising" },
+			{ q: "You enjoy gardening regularly.", t: "realistic" },
+			{ q: "You like following instructions step-by-step.", t: "conventional" },
+			{ q: "You enjoy learning how machines work.", t: "analytical" },
+			{ q: "You like performing on stage.", t: "creative" },
+			{ q: "You enjoy working in teams.", t: "social" },
+			{ q: "You like taking charge during projects.", t: "enterprising" },
+			{ q: "You enjoy fixing broken items.", t: "realistic" },
+			{ q: "You like organizing paperwork.", t: "conventional" },
+			{ q: "You enjoy solving science mysteries.", t: "analytical" },
+			{ q: "You like designing posters.", t: "creative" },
+			{ q: "You enjoy comforting upset friends.", t: "social" },
+			{ q: "You like thinking of new business ideas.", t: "enterprising" }
+			    ];
 
     const careers = {
       analytical: [
@@ -369,10 +261,14 @@
       document.getElementById('result').innerText = resultText;
     }
   </script>
-<div class="container">
-    <h2>Career Aptitude Test (Age 10–45)</h2>
-    <form id="careerForm"></form>
-    <button type="button" onclick="calculateCareer()">Submit</button>
+<div class="page-wrapper">
+    <div class="container">
+      <h2>Career Aptitude Test (Age 10–45)</h2>
+      <form id="careerForm"></form>
+    </div>
+    <div class="button-wrapper">
+      <button type="button" onclick="calculateCareer()">Submit</button>
+    </div>
     <div class="result" id="result"></div>
   </div>
 </body>
