@@ -91,11 +91,6 @@
   </style>
 </head>
 <body>
-  <h2>Career Aptitude Test (Age 10–45)</h2>
-  <form id="careerForm"></form>
-  <button type="button" onclick="calculateCareer()">Submit</button>
-  <div class="result" id="result"></div>
-
   <script>
     const traits = ["analytical", "creative", "social", "enterprising", "realistic", "conventional"];
     const questionsPool = [
@@ -261,15 +256,15 @@
       document.getElementById('result').innerText = resultText;
     }
   </script>
-<div class="page-wrapper">
-    <div class="container">
-      <h2>Career Aptitude Test (Age 10–45)</h2>
-      <form id="careerForm"></form>
-    </div>
-    <div class="button-wrapper">
-      <button type="button" onclick="calculateCareer()">Submit</button>
-    </div>
-    <div class="result" id="result"></div>
-  </div>
+		<div class="page-wrapper">
+		    <div class="container">
+		      <h2>Career Aptitude Test (Age 10–45)</h2>
+		      <form id="careerForm"></form>
+		      <div class="button-wrapper">
+		        <button type="button" onclick="calculateCareer()">Submit</button>
+		      </div>
+		      <div class="result" id="result"></div>
+		    </div>
+
 </body>
 </html>
