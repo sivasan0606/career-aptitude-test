@@ -33,9 +33,29 @@
 
         .score-container {
             font-size: 1.2rem;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-weight: bold;
             color: #8e44ad;
+        }
+
+        .difficulty-container {
+            margin-bottom: 20px;
+        }
+
+        .difficulty-btn {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .difficulty-btn.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
         }
 
         .jumbled-word {
@@ -102,6 +122,36 @@
             height: 20px;
         }
 
+        .firecracker-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .firecracker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: explode 1.5s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(10) translateY(100px);
+                opacity: 0;
+            }
+        }
+
         .correct {
             color: #27ae60;
         }
@@ -114,6 +164,11 @@
 <body>
     <div class="game-container">
         <h1>Word Jumble</h1>
+        <div class="difficulty-container">
+            <button class="difficulty-btn active" onclick="setDifficulty('simple')">Simple</button>
+            <button class="difficulty-btn" onclick="setDifficulty('medium')">Medium</button>
+            <button class="difficulty-btn" onclick="setDifficulty('complex')">Complex</button>
+        </div>
         <div class="score-container">Score: <span id="score">0</span></div>
         <div id="jumbled-word" class="jumbled-word">LOADING...</div>
 
@@ -130,19 +185,53 @@
         <button class="btn-action" id="next-btn" style="display: none;">Next Word</button>
     </div>
 
+    <div class="firecracker-container" id="firecracker-container"></div>
+
     <script>
-        const wordList = [
-            { word: "apple", hint: "A common red or green fruit" },
-            { word: "banana", hint: "A long yellow fruit" },
-            { word: "elephant", hint: "The largest land animal" },
-            { word: "computer", hint: "An electronic device for processing data" },
-            { word: "ocean", hint: "A large body of salt water" },
-            { word: "guitar", hint: "A musical instrument with strings" },
-            { word: "mountain", hint: "A large natural elevation of the earth" },
-            { word: "jupiter", hint: "The largest planet in our solar system" },
-            { word: "diamond", hint: "A precious stone made of carbon" },
-            { word: "library", hint: "A place where books are kept" }
-        ];
+        const wordList = {
+            simple: [
+                { word: "bird", hint: "A creature that flies" },
+                { word: "fish", hint: "Lives in water" },
+                { word: "tree", hint: "A tall plant with a trunk" },
+                { word: "moon", hint: "Shines at night" },
+                { word: "fire", hint: "Hot and glowing" },
+                { word: "book", hint: "Something you read" },
+                { word: "frog", hint: "A jumping amphibian" },
+                { word: "star", hint: "Twinkles in the sky" },
+                { word: "cake", hint: "Sweet dessert" },
+                { word: "lion", hint: "King of the jungle" }
+            ],
+            medium: [
+                { word: "banana", hint: "A long yellow fruit" },
+                { word: "orange", hint: "A round citrus fruit" },
+                { word: "guitar", hint: "Has strings and music" },
+                { word: "planet", hint: "Orbits a star" },
+                { word: "silver", hint: "A shiny gray metal" },
+                { word: "window", hint: "Look through it" },
+                { word: "puzzle", hint: "Needs to be solved" },
+                { word: "bridge", hint: "Crosses over water" },
+                { word: "camera", hint: "Takes photographs" },
+                { word: "garden", hint: "Place with flowers" }
+            ],
+            complex: [
+                { word: "elephant", hint: "Largest land animal" },
+                { word: "computer", hint: "Digital processor" },
+                { word: "mountain", hint: "Very high hill" },
+                { word: "treasure", hint: "Hidden riches" },
+                { word: "umbrella", hint: "Protects from rain" },
+                { word: "dinosaur", hint: "Extinct reptile" },
+                { word: "keyboard", hint: "Used for typing" },
+                { word: "backpack", hint: "Carried on shoulders" },
+                { word: "sandwich", hint: "Bread with filling" },
+                { word: "football", hint: "A popular ball game" }
+            ]
+        };
+
+        let currentDifficulty = 'simple';
+        let usedWords = [];
+        let correctStreak = 0;
+        let score = 0;
+        let currentWord = "";
 
         function jumbleWord(word) {
             let letters = word.split('');
@@ -157,17 +246,26 @@
             return letters.join('');
         }
 
-        let currentWord = "";
-        let score = 0;
-
         function getRandomWord() {
-            return wordList[Math.floor(Math.random() * wordList.length)];
+            const availableWords = wordList[currentDifficulty].filter(item => !usedWords.includes(item.word));
+
+            if (availableWords.length === 0) {
+                usedWords = []; // Reset if all words used
+                return getRandomWord();
+            }
+
+            const randomIndex = Math.floor(Math.random() * availableWords.length);
+            const selected = availableWords[randomIndex];
+            usedWords.push(selected.word);
+            return selected;
         }
 
         function generateOptions(correctAnswer) {
             let options = [correctAnswer];
+            const allPossibleWords = wordList[currentDifficulty].map(item => item.word);
+
             while (options.length < 4) {
-                let randomWord = wordList[Math.floor(Math.random() * wordList.length)].word;
+                let randomWord = allPossibleWords[Math.floor(Math.random() * allPossibleWords.length)];
                 if (!options.includes(randomWord)) {
                     options.push(randomWord);
                 }
@@ -180,6 +278,41 @@
             return options;
         }
 
+        function setDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            usedWords = [];
+            correctStreak = 0;
+
+            // Update UI
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase() === difficulty) {
+                    btn.classList.add('active');
+                }
+            });
+
+            initGame();
+        }
+
+        function showFirecrackers() {
+            const container = document.getElementById('firecracker-container');
+            const colors = ['#f1c40f', '#e67e22', '#e74c3c', '#9b59b6', '#3498db', '#2ecc71'];
+
+            for (let i = 0; i < 50; i++) {
+                const firecracker = document.createElement('div');
+                firecracker.className = 'firecracker';
+                firecracker.style.left = Math.random() * 100 + 'vw';
+                firecracker.style.top = Math.random() * 100 + 'vh';
+                firecracker.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(firecracker);
+
+                // Remove after animation
+                setTimeout(() => {
+                    firecracker.remove();
+                }, 1500);
+            }
+        }
+
         function handleSelection(selectedWord, correctWord) {
             const messageEl = document.getElementById("message");
             const nextBtn = document.getElementById("next-btn");
@@ -189,12 +322,20 @@
 
             if (selectedWord === correctWord) {
                 score += 10;
+                correctStreak++;
                 document.getElementById("score").innerText = score;
                 messageEl.innerText = "Correct! +10 points";
                 messageEl.className = "correct";
+
+                if (correctStreak === 3) {
+                    messageEl.innerText += " - Awesome! 3 in a row! 🎉";
+                    showFirecrackers();
+                    correctStreak = 0; // Reset streak after reward
+                }
             } else {
                 messageEl.innerText = `Wrong! The correct word was ${correctWord.toUpperCase()}.`;
                 messageEl.className = "wrong";
+                correctStreak = 0; // Reset streak on wrong answer
             }
 
             nextBtn.style.display = "inline-block";
